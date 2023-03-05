@@ -1,15 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [username, setUsername] = useState("unkown");
+
+  useEffect(() => {
+    fetch("/userinfo")
+      .then((result) => {
+        console.log("status", result.status);
+        return result.json();
+      })
+      .then((data) => setUsername(data.username));
+    return () => {
+      // this will be performed when component will unmount
+    };
+  }, []);
 
   return (
     <div className="App">
       <div>
         <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
+          <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
         <a href="https://reactjs.org" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
@@ -27,8 +41,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p>Username: {username}</p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
